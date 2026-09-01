@@ -1,0 +1,13 @@
+module meio_somador (
+
+	input wire A,
+	input wire B,
+	output wire cout,
+	output wire sum
+	
+	);
+	
+	xor (sum, a, b); 
+	and (cout, a, b);
+	
+endmodule

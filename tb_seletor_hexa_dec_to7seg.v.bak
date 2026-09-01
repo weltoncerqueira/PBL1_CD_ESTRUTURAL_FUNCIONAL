@@ -1,0 +1,519 @@
+// ============================================================
+// Test Bench para seletor_hexa_dec_to7seg
+// Compatível com Quartus II - Verilog 2001
+// Versão com validação automática
+// CORRIGIDO para ânodo comum (0 = aceso, 1 = apagado)
+// ============================================================
+
+`timescale 1 ns / 1 ns
+
+module tb_seletor_hexa_dec_to7seg;
+
+    // --- Sinais do DUT ---
+    reg  [15:0] somaFinal;
+    reg  [1:0]  sel;
+    wire [6:0]  display0;
+    wire [6:0]  display1;
+    wire [6:0]  display2;
+    wire [6:0]  display3;
+    wire [6:0]  display4;
+    wire        erro;
+
+    // --- Variáveis para contagem de erros ---
+    integer erros_total;
+    integer erros_hex;
+    integer erros_dec;
+    integer erros_apagado;
+    integer erros_erro;
+    integer erros_transicao;
+
+    // --- Instância do Módulo em Teste ---
+    seletor_hexa_dec_to7seg dut (
+        .somaFinal (somaFinal),
+        .sel       (sel),
+        .display0  (display0),
+        .display1  (display1),
+        .display2  (display2),
+        .display3  (display3),
+        .display4  (display4),
+        .erro      (erro)
+    );
+
+    // ============================================================
+    // FUNÇÃO DE VERIFICAÇÃO DE DISPLAY
+    // Mapeamento Ânodo Comum: seg[6:0] = {a,b,c,d,e,f,g}
+    // 0 = aceso, 1 = apagado
+    // ============================================================
+    function automatic integer verifica_display;
+        input [6:0] codigo;
+        input [3:0] digito_esperado;
+        begin
+            case (digito_esperado)
+                4'h0: verifica_display = (codigo === 7'b1000000);  // 0
+                4'h1: verifica_display = (codigo === 7'b1111001);  // 1
+                4'h2: verifica_display = (codigo === 7'b0100100);  // 2
+                4'h3: verifica_display = (codigo === 7'b0110000);  // 3
+                4'h4: verifica_display = (codigo === 7'b0011001);  // 4
+                4'h5: verifica_display = (codigo === 7'b0010010);  // 5
+                4'h6: verifica_display = (codigo === 7'b0000010);  // 6
+                4'h7: verifica_display = (codigo === 7'b1111000);  // 7
+                4'h8: verifica_display = (codigo === 7'b0000000);  // 8
+                4'h9: verifica_display = (codigo === 7'b0010000);  // 9
+                4'hA: verifica_display = (codigo === 7'b0001000);  // A
+                4'hB: verifica_display = (codigo === 7'b0000011);  // b
+                4'hC: verifica_display = (codigo === 7'b1000110);  // C
+                4'hD: verifica_display = (codigo === 7'b0100001);  // d
+                4'hE: verifica_display = (codigo === 7'b0000110);  // E
+                4'hF: verifica_display = (codigo === 7'b0001110);  // F
+                default: verifica_display = 0;
+            endcase
+        end
+    endfunction
+
+    // ============================================================
+    // TASK PARA VERIFICAR DISPLAY COM MENSAGEM
+    // ============================================================
+    task verifica_display_msg;
+        input [6:0] codigo;
+        input [3:0] digito_esperado;
+        input [7:0] nome_display;
+        input [7:0] nome_digito;
+        input       modo_hex;
+        begin
+            if (verifica_display(codigo, digito_esperado)) begin
+                if (modo_hex) begin
+                    $display("  [PASS] %s (nibble=%s) = 0x%h", 
+                             nome_display, nome_digito, codigo);
+                end else begin
+                    $display("  [PASS] %s (%s) = 0x%h", 
+                             nome_display, nome_digito, codigo);
+                end
+            end else begin
+                if (modo_hex) begin
+                    $display("  [FAIL] %s (nibble=%s) = 0x%h (esperado diferente)", 
+                             nome_display, nome_digito, codigo);
+                end else begin
+                    $display("  [FAIL] %s (%s) = 0x%h (esperado diferente)", 
+                             nome_display, nome_digito, codigo);
+                end
+                erros_total = erros_total + 1;
+            end
+        end
+    endtask
+
+    // ============================================================
+    // TASK PARA VERIFICAR DISPLAY APAGADO
+    // ============================================================
+    task verifica_apagado;
+        input [6:0] codigo;
+        input [7:0] nome_display;
+        begin
+            if (codigo === 7'b1111111) begin
+                $display("  [PASS] %s = 0x%h (apagado)", nome_display, codigo);
+            end else begin
+                $display("  [FAIL] %s = 0x%h (esperado 0x7F = 1111111)", nome_display, codigo);
+                erros_total = erros_total + 1;
+            end
+        end
+    endtask
+
+    // ============================================================
+    // TASK PARA VERIFICAR SINAL DE ERRO
+    // ============================================================
+    task verifica_erro;
+        input erro_obtido;
+        input erro_esperado;
+        input [7:0] descricao;
+        begin
+            if (erro_obtido === erro_esperado) begin
+                $display("  [PASS] erro = %b (esperado %b) - %s", 
+                         erro_obtido, erro_esperado, descricao);
+            end else begin
+                $display("  [FAIL] erro = %b (esperado %b) - %s", 
+                         erro_obtido, erro_esperado, descricao);
+                erros_total = erros_total + 1;
+            end
+        end
+    endtask
+
+    // ============================================================
+    // PROCEDIMENTO PRINCIPAL DE TESTE
+    // ============================================================
+    initial begin
+        // --- Inicialização ---
+        erros_total  = 0;
+        erros_hex    = 0;
+        erros_dec    = 0;
+        erros_apagado = 0;
+        erros_erro   = 0;
+        erros_transicao = 0;
+
+        somaFinal = 16'h0000;
+        sel       = 2'b00;
+
+        $display("");
+        $display("=============================================");
+        $display(" TESTE DO SELETOR HEXADECIMAL/DECIMAL");
+        $display(" Mapeamento: seg[6:0] = {a,b,c,d,e,f,g}");
+        $display(" Ânodo Comum (0 = aceso, 1 = apagado)");
+        $display("=============================================");
+        $display("");
+
+        // Aguarda estabilização
+        #10;
+
+        // ====================================================
+        // TESTE 1: sel = 00 (Todos os displays apagados)
+        // ====================================================
+        $display("=== TESTE 1: sel=00 (Displays Apagados) ===");
+        sel = 2'b00;
+        somaFinal = 16'h1234;
+        #10;
+
+        verifica_apagado(display0, "Display0");
+        verifica_apagado(display1, "Display1");
+        verifica_apagado(display2, "Display2");
+        verifica_apagado(display3, "Display3");
+        verifica_apagado(display4, "Display4");
+        verifica_erro(erro, 1'b0, "Modo apagado");
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 2: sel = 01 (Modo Hexadecimal)
+        // ====================================================
+        $display("=== TESTE 2: sel=01 (Modo Hexadecimal) ===");
+        sel = 2'b01;
+
+        // --- Teste 2.1: 0xABCD ---
+        somaFinal = 16'hABCD;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_display_msg(display3, 4'hA, "Display3", "A", 1);
+        verifica_display_msg(display2, 4'hB, "Display2", "B", 1);
+        verifica_display_msg(display1, 4'hC, "Display1", "C", 1);
+        verifica_display_msg(display0, 4'hD, "Display0", "D", 1);
+        verifica_apagado(display4, "Display4");
+        verifica_erro(erro, 1'b0, "Modo HEX - ABCD");
+        #10;
+        $display("");
+
+        // --- Teste 2.2: 0x00FF ---
+        somaFinal = 16'h00FF;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_display_msg(display3, 4'h0, "Display3", "0", 1);
+        verifica_display_msg(display2, 4'h0, "Display2", "0", 1);
+        verifica_display_msg(display1, 4'hF, "Display1", "F", 1);
+        verifica_display_msg(display0, 4'hF, "Display0", "F", 1);
+        verifica_erro(erro, 1'b0, "Modo HEX - 00FF");
+        #10;
+        $display("");
+
+        // --- Teste 2.3: 0x5A3C ---
+        somaFinal = 16'h5A3C;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_display_msg(display3, 4'h5, "Display3", "5", 1);
+        verifica_display_msg(display2, 4'hA, "Display2", "A", 1);
+        verifica_display_msg(display1, 4'h3, "Display1", "3", 1);
+        verifica_display_msg(display0, 4'hC, "Display0", "C", 1);
+        verifica_erro(erro, 1'b0, "Modo HEX - 5A3C");
+        #10;
+        $display("");
+
+        // --- Teste 2.4: 0xFEDC ---
+        somaFinal = 16'hFEDC;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_display_msg(display3, 4'hF, "Display3", "F", 1);
+        verifica_display_msg(display2, 4'hE, "Display2", "E", 1);
+        verifica_display_msg(display1, 4'hD, "Display1", "D", 1);
+        verifica_display_msg(display0, 4'hC, "Display0", "C", 1);
+        verifica_erro(erro, 1'b0, "Modo HEX - FEDC");
+        #10;
+        $display("");
+
+        // --- Teste 2.5: 0x9876 ---
+        somaFinal = 16'h9876;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_display_msg(display3, 4'h9, "Display3", "9", 1);
+        verifica_display_msg(display2, 4'h8, "Display2", "8", 1);
+        verifica_display_msg(display1, 4'h7, "Display1", "7", 1);
+        verifica_display_msg(display0, 4'h6, "Display0", "6", 1);
+        verifica_erro(erro, 1'b0, "Modo HEX - 9876");
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 3: sel = 10 (Modo Decimal)
+        // ====================================================
+        $display("=== TESTE 3: sel=10 (Modo Decimal) ===");
+        sel = 2'b10;
+
+        // --- Teste 3.1: 12345 ---
+        somaFinal = 16'd12345;
+        #10;
+        $display("  somaFinal = %d (0x%h)", somaFinal, somaFinal);
+        verifica_display_msg(display4, 4'h1, "Display4", "Dez Milhar=1", 0);
+        verifica_display_msg(display3, 4'h2, "Display3", "Milhar=2", 0);
+        verifica_display_msg(display2, 4'h3, "Display2", "Centena=3", 0);
+        verifica_display_msg(display1, 4'h4, "Display1", "Dezena=4", 0);
+        verifica_display_msg(display0, 4'h5, "Display0", "Unidade=5", 0);
+        verifica_erro(erro, 1'b0, "Modo DEC - 12345");
+        #10;
+        $display("");
+
+        // --- Teste 3.2: 65535 (máximo) ---
+        somaFinal = 16'd65535;
+        #10;
+        $display("  somaFinal = %d (0x%h)", somaFinal, somaFinal);
+        verifica_display_msg(display4, 4'h6, "Display4", "Dez Milhar=6", 0);
+        verifica_display_msg(display3, 4'h5, "Display3", "Milhar=5", 0);
+        verifica_display_msg(display2, 4'h5, "Display2", "Centena=5", 0);
+        verifica_display_msg(display1, 4'h3, "Display1", "Dezena=3", 0);
+        verifica_display_msg(display0, 4'h5, "Display0", "Unidade=5", 0);
+        verifica_erro(erro, 1'b0, "Modo DEC - 65535");
+        #10;
+        $display("");
+
+        // --- Teste 3.3: 0 (zero) ---
+        somaFinal = 16'd0;
+        #10;
+        $display("  somaFinal = %d (0x%h)", somaFinal, somaFinal);
+        verifica_display_msg(display4, 4'h0, "Display4", "Dez Milhar=0", 0);
+        verifica_display_msg(display3, 4'h0, "Display3", "Milhar=0", 0);
+        verifica_display_msg(display2, 4'h0, "Display2", "Centena=0", 0);
+        verifica_display_msg(display1, 4'h0, "Display1", "Dezena=0", 0);
+        verifica_display_msg(display0, 4'h0, "Display0", "Unidade=0", 0);
+        verifica_erro(erro, 1'b0, "Modo DEC - 0");
+        #10;
+        $display("");
+
+        // --- Teste 3.4: 9999 ---
+        somaFinal = 16'd9999;
+        #10;
+        $display("  somaFinal = %d (0x%h)", somaFinal, somaFinal);
+        verifica_display_msg(display4, 4'h0, "Display4", "Dez Milhar=0", 0);
+        verifica_display_msg(display3, 4'h9, "Display3", "Milhar=9", 0);
+        verifica_display_msg(display2, 4'h9, "Display2", "Centena=9", 0);
+        verifica_display_msg(display1, 4'h9, "Display1", "Dezena=9", 0);
+        verifica_display_msg(display0, 4'h9, "Display0", "Unidade=9", 0);
+        verifica_erro(erro, 1'b0, "Modo DEC - 9999");
+        #10;
+        $display("");
+
+        // --- Teste 3.5: 54321 ---
+        somaFinal = 16'd54321;
+        #10;
+        $display("  somaFinal = %d (0x%h)", somaFinal, somaFinal);
+        verifica_display_msg(display4, 4'h5, "Display4", "Dez Milhar=5", 0);
+        verifica_display_msg(display3, 4'h4, "Display3", "Milhar=4", 0);
+        verifica_display_msg(display2, 4'h3, "Display2", "Centena=3", 0);
+        verifica_display_msg(display1, 4'h2, "Display1", "Dezena=2", 0);
+        verifica_display_msg(display0, 4'h1, "Display0", "Unidade=1", 0);
+        verifica_erro(erro, 1'b0, "Modo DEC - 54321");
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 4: sel = 11 (Flag de Erro)
+        // ====================================================
+        $display("=== TESTE 4: sel=11 (Flag de Erro) ===");
+        sel = 2'b11;
+
+        // --- Teste 4.1: 0xFFFF ---
+        somaFinal = 16'hFFFF;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_erro(erro, 1'b1, "Modo erro - FFFF");
+        #10;
+
+        // --- Teste 4.2: 0x0000 ---
+        somaFinal = 16'h0000;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_erro(erro, 1'b1, "Modo erro - 0000");
+        #10;
+
+        // --- Teste 4.3: 0x1234 ---
+        somaFinal = 16'h1234;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_erro(erro, 1'b1, "Modo erro - 1234");
+        #10;
+
+        // --- Teste 4.4: 0x5A3C ---
+        somaFinal = 16'h5A3C;
+        #10;
+        $display("  somaFinal = 0x%h", somaFinal);
+        verifica_erro(erro, 1'b1, "Modo erro - 5A3C");
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 5: Transições entre modos
+        // ====================================================
+        $display("=== TESTE 5: Transições de Modo ===");
+        somaFinal = 16'hFACE;
+
+        // --- Transição 5.1: Apagado -> Hexadecimal ---
+        sel = 2'b00;
+        #10;
+        sel = 2'b01;
+        #10;
+        $display("  Transição 00->01 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b0, "Transição 00->01");
+        #10;
+
+        // --- Transição 5.2: Hexadecimal -> Decimal ---
+        sel = 2'b10;
+        #10;
+        $display("  Transição 01->10 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b0, "Transição 01->10");
+        #10;
+
+        // --- Transição 5.3: Decimal -> Erro ---
+        sel = 2'b11;
+        #10;
+        $display("  Transição 10->11 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b1, "Transição 10->11");
+        #10;
+
+        // --- Transição 5.4: Erro -> Apagado ---
+        sel = 2'b00;
+        #10;
+        $display("  Transição 11->00 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b0, "Transição 11->00");
+        #10;
+
+        // --- Transição 5.5: Apagado -> Decimal ---
+        sel = 2'b10;
+        #10;
+        $display("  Transição 00->10 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b0, "Transição 00->10");
+        #10;
+
+        // --- Transição 5.6: Decimal -> Apagado ---
+        sel = 2'b00;
+        #10;
+        $display("  Transição 10->00 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b0, "Transição 10->00");
+        #10;
+
+        // --- Transição 5.7: Apagado -> Erro ---
+        sel = 2'b11;
+        #10;
+        $display("  Transição 00->11 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b1, "Transição 00->11");
+        #10;
+
+        // --- Transição 5.8: Erro -> Decimal ---
+        sel = 2'b10;
+        #10;
+        $display("  Transição 11->10 com somaFinal=0x%h", somaFinal);
+        verifica_erro(erro, 1'b0, "Transição 11->10");
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 6: Verificação do Display4 no Modo Hexadecimal
+        // ====================================================
+        $display("=== TESTE 6: Display4 no Modo Hexadecimal ===");
+        sel = 2'b01;
+
+        // --- Teste 6.1: Display4 com 0xFFFF ---
+        somaFinal = 16'hFFFF;
+        #10;
+        $display("  somaFinal = 0x%h (Display4 deve estar apagado)", somaFinal);
+        verifica_apagado(display4, "Display4");
+        #10;
+
+        // --- Teste 6.2: Display4 com 0x0000 ---
+        somaFinal = 16'h0000;
+        #10;
+        $display("  somaFinal = 0x%h (Display4 deve estar apagado)", somaFinal);
+        verifica_apagado(display4, "Display4");
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 7: Verificação do Display4 no Modo Decimal
+        // ====================================================
+        $display("=== TESTE 7: Display4 no Modo Decimal ===");
+        sel = 2'b10;
+
+        // --- Teste 7.1: Display4 com 10000 ---
+        somaFinal = 16'd10000;
+        #10;
+        $display("  somaFinal = %d (Display4 deve mostrar 1)", somaFinal);
+        verifica_display_msg(display4, 4'h1, "Display4", "Dez Milhar=1", 0);
+        #10;
+
+        // --- Teste 7.2: Display4 com 60000 ---
+        somaFinal = 16'd60000;
+        #10;
+        $display("  somaFinal = %d (Display4 deve mostrar 6)", somaFinal);
+        verifica_display_msg(display4, 4'h6, "Display4", "Dez Milhar=6", 0);
+        #10;
+
+        // --- Teste 7.3: Display4 com 9999 (deve mostrar 0) ---
+        somaFinal = 16'd9999;
+        #10;
+        $display("  somaFinal = %d (Display4 deve mostrar 0)", somaFinal);
+        verifica_display_msg(display4, 4'h0, "Display4", "Dez Milhar=0", 0);
+        #10;
+        $display("");
+
+        // ====================================================
+        // TESTE 8: Verificação do Modo Apagado com diferentes valores
+        // ====================================================
+        $display("=== TESTE 8: Modo Apagado com diferentes valores ===");
+        sel = 2'b00;
+
+        // --- Teste 8.1: 0xFFFF ---
+        somaFinal = 16'hFFFF;
+        #10;
+        $display("  somaFinal = 0x%h (todos apagados)", somaFinal);
+        verifica_apagado(display0, "Display0");
+        verifica_apagado(display1, "Display1");
+        verifica_apagado(display2, "Display2");
+        verifica_apagado(display3, "Display3");
+        verifica_apagado(display4, "Display4");
+        verifica_erro(erro, 1'b0, "Apagado com FFFF");
+        #10;
+
+        // --- Teste 8.2: 0x0000 ---
+        somaFinal = 16'h0000;
+        #10;
+        $display("  somaFinal = 0x%h (todos apagados)", somaFinal);
+        verifica_apagado(display0, "Display0");
+        verifica_apagado(display1, "Display1");
+        verifica_apagado(display2, "Display2");
+        verifica_apagado(display3, "Display3");
+        verifica_apagado(display4, "Display4");
+        verifica_erro(erro, 1'b0, "Apagado com 0000");
+        #10;
+        $display("");
+
+        // ====================================================
+        // RESUMO FINAL DOS TESTES
+        // ====================================================
+        $display("=============================================");
+        $display("           RESUMO DOS TESTES");
+        $display("=============================================");
+        if (erros_total == 0) begin
+            $display(" ✅ TODOS OS TESTES PASSARAM COM SUCESSO!");
+            $display(" ✅ Nenhum erro detectado.");
+        end else begin
+            $display(" ❌ FORAM DETECTADOS %0d ERRO(S)!", erros_total);
+            $display(" ❌ Verifique os logs acima para detalhes.");
+        end
+        $display("=============================================");
+        $display("=== TESTE CONCLUÍDO ===");
+        $display("=============================================");
+        $stop;
+    end
+
+endmodule

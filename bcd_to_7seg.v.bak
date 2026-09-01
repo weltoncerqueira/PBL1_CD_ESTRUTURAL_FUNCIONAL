@@ -1,0 +1,84 @@
+// Decodificador BCD (0-9) para display de 7 segmentos - ANODO COMUM
+// Saída: 0 = Aceso, 1 = Apagado
+// Ordem dos segmentos: {a, b, c, d, e, f, g}
+
+module bcd_to_7seg (
+    input  wire [3:0] bcd,   // Entrada BCD (0 a 9)
+    output wire [6:0] seg    // Saída para os 7 segmentos
+);
+
+    // Fios internos para as entradas invertidas (a, b, c, d)
+    wire nA, nB, nC, nD;
+
+    // Inversão das entradas BCD para usar na lógica
+    not (nA, bcd[0]);
+    not (nB, bcd[1]);
+    not (nC, bcd[2]);
+    not (nD, bcd[3]);
+
+    // ------------------- SEGMENTO A -------------------
+    // Fórmula booleana (SOP) para ativar segmento A (Baixo) para BCD 0,2,3,5,6,7,8,9
+    // A = (C' B' D') + (C B' D) + (C B D')
+    wire termoA1, termoA2, termoA3;
+    and (termoA1, nC, nB, nD);       // C' B' D'
+    and (termoA2, bcd[2], nB, bcd[0]); // C B' D
+    and (termoA3, bcd[2], bcd[1], nD); // C B D'
+    or  (seg[6], termoA1, termoA2, termoA3); // Saída A (bit mais significativo)
+
+    // ------------------- SEGMENTO B -------------------
+    // Fórmula booleana para ativar segmento B (Baixo) para BCD 0,1,2,3,4,7,8,9
+    // B = (C' B') + (C' D) + (C B D)
+    wire termoB1, termoB2, termoB3;
+    and (termoB1, nC, nB);                 // C' B'
+    and (termoB2, nC, bcd[0]);             // C' D
+    and (termoB3, bcd[2], bcd[1], bcd[0]); // C B D
+    or  (seg[5], termoB1, termoB2, termoB3); // Saída B
+
+    // ------------------- SEGMENTO C -------------------
+    // Fórmula booleana para ativar segmento C (Baixo) para BCD 0,1,3,4,5,6,7,8,9
+    // C = (C' B') + (C' D) + (C B')
+    wire termoC1, termoC2, termoC3;
+    and (termoC1, nC, nB);                 // C' B'
+    and (termoC2, nC, bcd[0]);             // C' D
+    and (termoC3, bcd[2], nB);             // C B'
+    or  (seg[4], termoC1, termoC2, termoC3); // Saída C
+
+    // ------------------- SEGMENTO D -------------------
+    // Fórmula booleana para ativar segmento D (Baixo) para BCD 0,2,3,5,6,8,9
+    // D = (C' B' D') + (C' B D) + (C B' D) + (C B D')
+    wire termoD1, termoD2, termoD3, termoD4;
+    and (termoD1, nC, nB, nD);              // C' B' D'
+    and (termoD2, nC, bcd[1], bcd[0]);      // C' B D
+    and (termoD3, bcd[2], nB, bcd[0]);      // C B' D
+    and (termoD4, bcd[2], bcd[1], nD);      // C B D'
+    or  (seg[3], termoD1, termoD2, termoD3, termoD4); // Saída D
+
+    // ------------------- SEGMENTO E -------------------
+    // Fórmula booleana para ativar segmento E (Baixo) para BCD 0,2,6,8
+    // E = (C' B' D') + (C B' D')
+    wire termoE1, termoE2;
+    and (termoE1, nC, nB, nD);              // C' B' D'
+    and (termoE2, bcd[2], nB, nD);          // C B' D'
+    or  (seg[2], termoE1, termoE2);         // Saída E
+
+    // ------------------- SEGMENTO F -------------------
+    // Fórmula booleana para ativar segmento F (Baixo) para BCD 0,4,5,6,8,9
+    // F = (C' B' D') + (C' B D') + (C B' D') + (C B D)
+    wire termoF1, termoF2, termoF3, termoF4;
+    and (termoF1, nC, nB, nD);              // C' B' D'
+    and (termoF2, nC, bcd[1], nD);          // C' B D'
+    and (termoF3, bcd[2], nB, nD);          // C B' D'
+    and (termoF4, bcd[2], bcd[1], bcd[0]);  // C B D
+    or  (seg[1], termoF1, termoF2, termoF3, termoF4); // Saída F
+
+    // ------------------- SEGMENTO G -------------------
+    // Fórmula booleana para ativar segmento G (Baixo) para BCD 2,3,4,5,6,8,9
+    // G = (C' B D') + (C' B D) + (C B' D') + (C B D)
+    wire termoG1, termoG2, termoG3, termoG4;
+    and (termoG1, nC, bcd[1], nD);          // C' B D'
+    and (termoG2, nC, bcd[1], bcd[0]);      // C' B D
+    and (termoG3, bcd[2], nB, nD);          // C B' D'
+    and (termoG4, bcd[2], bcd[1], bcd[0]);  // C B D
+    or  (seg[0], termoG1, termoG2, termoG3, termoG4); // Saída G
+
+endmodule

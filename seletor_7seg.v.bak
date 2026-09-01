@@ -1,0 +1,22 @@
+module seletor_7seg (
+    input  wire [6:0] A,    // Opção 00 (ex: x Decimal)
+    input  wire [6:0] B,    // Opção 01 (ex: x Hexadecimal)
+    input  wire [6:0] C,    // Opção 10 (ex: y Decimal)
+    input  wire [6:0] D,    // Opção 11 (ex: y Hexadecimal ou Padrão de Erro)
+    input  wire [1:0] sel,  // SW[9:8]
+    output wire [6:0] S     // Saída para o Display de 7 Segmentos
+);
+
+    // MÁSCARAS DE SELEÇÃO (1 bit cada)
+    wire sel_00 = ~sel[1] & ~sel[0];
+    wire sel_01 = ~sel[1] &  sel[0];
+    wire sel_10 =  sel[1] & ~sel[0];
+    wire sel_11 =  sel[1] &  sel[0];
+
+    // Aplicação das máscaras expandidas para os 7 bits de cada entrada
+    assign S = ({7{sel_00}} & A) |
+               ({7{sel_01}} & B) |
+               ({7{sel_10}} & C) |
+               ({7{sel_11}} & D);
+
+endmodule

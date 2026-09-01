@@ -1,0 +1,123 @@
+`timescale 1ns / 1ps
+
+module tb_equacao_completa;
+
+    // --- Declaração de Sinais ---
+    reg  [7:0] x;                 // Entrada de 8 bits
+    reg        clk;               // (Opcional) Clock para forçar mudanças, se necessário
+    
+    // Saídas (conectadas ao DUT)
+    wire [6:0] dez_milhar, milhar, centena, dezena, unidade;
+    wire       sinal_negativo;
+    wire       overflow;
+    wire       zero;
+    wire       cout;
+    wire       erro;
+
+    // --- Instanciação do Módulo Principal (DUT) ---
+    equacao_completa uut (
+        .x(x),
+        .dez_milhar(dez_milhar),
+        .milhar(milhar),
+        .centena(centena),
+        .dezena(dezena),
+        .unidade(unidade),
+        .sinal_negativo(sinal_negativo),
+        .overflow(overflow),
+        .zero(zero),
+        .cout(cout),
+        .erro(erro)
+    );
+
+    // --- Geração de Clock (opcional, caso seu circuito precise) ---
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // Clock de 10ns de período
+    end
+
+    // --- Bloco de Estímulos ---
+    initial begin
+        // Formatação da saída no console para facilitar a leitura
+        $display("Tempo |  x (dec) | Resultado esperado (dec) | Sinal | Zero | Overflow | Cout");
+        $display("-----------------------------------------------------------------------------");
+
+        // 1. Teste básico: x = 0 (f(0) = 0^2 - 5*0 + 6 = 6)
+        x = 8'd0;
+        #10;
+        $display("%4t | %3d |          6                 |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 2. Teste: x = 2 (f(2) = 4 - 10 + 6 = 0) -> Deve acender o ZERO
+        x = 8'd2;
+        #10;
+        $display("%4t | %3d |          0                 |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 3. Teste: x = 3 (f(3) = 9 - 15 + 6 = 0) -> Deve acender o ZERO
+        x = 8'd3;
+        #10;
+        $display("%4t | %3d |          0                 |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 4. Teste: x = 5 (f(5) = 25 - 25 + 6 = 6) -> Deve ser POSITIVO
+        x = 8'd5;
+        #10;
+        $display("%4t | %3d |          6                 |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 5. Teste: x = 10 (f(10) = 100 - 50 + 6 = 56) -> Deve ser POSITIVO
+        x = 8'd10;
+        #10;
+        $display("%4t | %3d |          56                |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 6. Teste: x = 20 (f(20) = 400 - 100 + 6 = 306) -> 3 dígitos
+        x = 8'd20;
+        #10;
+        $display("%4t | %3d |          306               |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 7. Teste: x = 100 (f(100) = 10000 - 500 + 6 = 9506) -> 4 dígitos
+        x = 8'd100;
+        #10;
+        $display("%4t | %3d |          9506              |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 8. Teste de valor máximo: x = 127 (f(127) = 16129 - 635 + 6 = 15500)
+        x = 8'd127;
+        #10;
+        $display("%4t | %3d |          15500             |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 9. Teste com x negativo: x = -10 (f(-10) = 100 + 50 + 6 = 156)
+        // Como x é complemento de 2, -10 em 8 bits é 11110110 (246 decimal)
+        x = -8'sd10; 
+        #10;
+        $display("%4t | %3d |          156               |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 10. Teste de overflow: Um valor que estoure 16 bits (se possível com x de 8 bits)
+        // Para estourar, precisaríamos de x > 255, mas x só tem 8 bits.
+        // Este teste serve para garantir que o overflow fica em 0 na faixa normal.
+        x = 8'd50;
+        #10;
+        $display("%4t | %3d |          2276              |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // 11. Teste para verificar sinal NEGATIVO no display:
+        // O módulo de complemento de 2 sempre calcula o sinal, mas para x = -128:
+        // f(-128) = 16384 + 640 + 6 = 17030 (positivo, sem sinal)
+        // f(-1) = 1 + 5 + 6 = 12 (positivo)
+        // Na verdade, para x entre -128 e 127, o delta é -49, então nunca fica negativo
+        // (o mínimo da parábola é em x=2.5, y=-0.25). Então o sinal_negativo 
+        // deve permanecer 0 para todos os x inteiros neste intervalo.
+        x = -8'sd1; 
+        #10;
+        $display("%4t | %3d |          12                |   %b   |  %b   |    %b     |  %b", 
+                 $time, x, sinal_negativo, zero, overflow, cout);
+
+        // Fim da simulação
+        $stop;
+    end
+
+endmodule

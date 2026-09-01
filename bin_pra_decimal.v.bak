@@ -1,0 +1,27 @@
+module bin_pra_decimal (
+    input  wire [7:0] valor_bin,      // Número binário de 8 bits (0 a 255)
+    output wire [3:0] digito_centena, // 0 a 2
+    output wire [3:0] digito_dezena,  // 0 a 9
+    output wire [3:0] digito_unidade  // 0 a 9
+);
+
+    // 1. Lógica para extrair a CENTENA
+    // Divisão inteira por 100 (constante). 
+    // Ex: 234 / 100 = 2.
+    assign digito_centena = valor_bin / 8'd100;
+
+    // 2. Lógica para extrair a DEZENA e a UNIDADE
+    // Primeiro pegamos o resto da divisão por 100. 
+    // Ex: 234 % 100 = 34.
+    wire [7:0] resto_centena;
+    assign resto_centena = valor_bin % 8'd100;
+
+    // Agora dividimos esse resto por 10 para achar a dezena.
+    // Ex: 34 / 10 = 3.
+    assign digito_dezena = resto_centena / 8'd10;
+
+    // E pegamos o resto da divisão por 10 para achar a unidade.
+    // Ex: 34 % 10 = 4.
+    assign digito_unidade = resto_centena % 8'd10;
+
+endmodule

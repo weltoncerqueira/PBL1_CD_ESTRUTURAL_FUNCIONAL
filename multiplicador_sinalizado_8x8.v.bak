@@ -1,0 +1,43 @@
+// multiplicador_sinalizado_8x8.v
+// Função: Multiplica dois números de 8 bits com sinal usando multiplicador sem sinal
+
+module multiplicador_sinalizado_8x8 (
+    input  wire [7:0] a,         
+    input  wire [7:0] b,         
+    output wire [15:0] saida_final 
+);
+
+	wire [15:0] produto;
+	wire [7:0] vbs_a, vbs_b;
+	wire bs1, bs2, resultado_bs;
+	
+	// Calcula os valores absolutos
+	valor_absoluto  abs_a_inst( .entrada(a), .valor_absoluto(vbs_a));
+	valor_absoluto  abs_b_inst( .entrada(b), .valor_absoluto(vbs_b));
+	
+	// Detecta os sinais
+	detector_sinal detector_a ( .numero(a), .bs(bs1) );
+	detector_sinal detector_b ( .numero(b), .bs(bs2) );
+	
+	// Multiplica os valores absolutos
+	multiplier_8x8 (
+		.A(vbs_a),
+		.B(vbs_b),
+		.S(produto)
+		);
+		
+	// Determina o sinal do resultado
+   // Regra: sinais iguais → positivo (0), sinais diferentes → negativo (1)
+   assign resultado_bs = bs1 ^ bs2;  // XOR
+	
+	// Calcula complemento de 2 para 16 bits
+	// Se resultado for negativo, usa o complemento
+	// Se resultado for positivo, passa direto
+	complementoDe2_16bits comp_result (
+        .A(produto),
+		  .bs(resultado_bs),
+		  .out(saida_final)  
+    );
+			
+
+endmodule

@@ -1,0 +1,73 @@
+
+module equacao_completa (
+    input  wire [7:0]  x,
+    output wire [15:0] y,
+	 
+    output wire        overflow,
+    output wire        zero,
+    output wire        cout,
+    output wire        erro
+);
+    // --- Sinais internos ---
+    wire [15:0] x_quadrado;
+    wire [15:0] cinco_x;
+    wire [15:0] menos_cinco_x;
+    wire [15:0] soma1;
+    wire [15:0] soma2;
+	 
+    wire        cout1, cout2;
+    wire        ov1, ov2;
+    
+    // Multiplicação x²
+    multiplicador_sinalizado_8x8 multp1 (
+        .a(x),
+        .b(x),
+        .saida_final(x_quadrado)   // VERIFIQUE O NOME DA PORTA NO SEU MÓDULO!
+    );
+
+    // Multiplicação 5x
+    multiplicador_sinalizado_8x8 multp2 (
+        .a(x),
+        .b(8'd5),
+        .saida_final(cinco_x)      // VERIFIQUE O NOME DA PORTA NO SEU MÓDULO!
+    );
+    
+    // Calcula -5x = complemento de 2 de 5x
+    complementoDe2_16bits neg_5x (
+        .A(cinco_x),
+        .bs(1'b1),         // SEMPRE negativo (força complemento)
+        .out(menos_cinco_x)
+    );
+    
+    // Soma x² + (-5x)
+    somador_16bits somador1 (
+        .a(x_quadrado),
+        .b(menos_cinco_x),
+        .cin(1'b0),
+        .sum(soma1),
+        .cout(cout1),
+        .overflow(ov1)           // Overflow da primeira soma
+    );
+    
+    // Soma +6
+    somador_16bits somador2 (
+        .a(soma1),
+        .b(16'd6),
+        .cin(1'b0),
+        .sum(soma2),
+        .cout(cout2),
+        .overflow(ov2)           // Overflow da segunda soma
+    );
+    
+    // --- Saídas ---
+    assign y = soma2;                     // Resultado da função
+    
+    assign cout = cout2;                  // LEDR[2] - Carry da última soma
+    
+    assign zero = (soma2 == 16'b0);       // LEDR[1] - Resultado é ZERO?
+    
+    assign overflow = ov1 | ov2;          // LEDR[0] - Overflow em qualquer soma
+    
+    assign erro = 1'b0;                   // LEDR[3] - Sem erro nesta implementação
+
+endmodule 

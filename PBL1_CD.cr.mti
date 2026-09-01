@@ -1,0 +1,211 @@
+B:/altera/Projetos/PBL1_CD/testbench_bcd.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/testbench_bcd.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module testbench_bcd
+
+Top level modules:
+	testbench_bcd
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_seletor_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/tb_seletor_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_seletor_7seg
+
+Top level modules:
+	tb_seletor_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_multiplicador_8x8_sinalizado.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/tb_multiplicador_8x8_sinalizado.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_multiplicador_8x8_sinalizado
+
+Top level modules:
+	tb_multiplicador_8x8_sinalizado
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_seletor_to7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/tb_seletor_to7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_seletor_to7seg
+
+Top level modules:
+	tb_seletor_to7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/equacao_completa.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/equacao_completa.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module equacao_completa
+
+Top level modules:
+	equacao_completa
+
+} {} {}} B:/altera/Projetos/PBL1_CD/bcd_corrector.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/bcd_corrector.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bcd_corrector
+
+Top level modules:
+	bcd_corrector
+
+} {} {}} B:/altera/Projetos/PBL1_CD/mux_2x1.v {1 {vlog -work work B:/altera/Projetos/PBL1_CD/mux_2x1.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module mux_2x1
+
+Top level modules:
+	mux_2x1
+
+} {} {}} B:/altera/Projetos/PBL1_CD/mux_2x1_16bits.v {1 {vlog -work work B:/altera/Projetos/PBL1_CD/mux_2x1_16bits.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module mux_2x1_16bits
+
+Top level modules:
+	mux_2x1_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD/multiplicador_sinalizado_8x8.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/multiplicador_sinalizado_8x8.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module multiplicador_8x8_sinalizado
+
+Top level modules:
+	multiplicador_8x8_sinalizado
+
+} {} {}} B:/altera/Projetos/PBL1_CD/mux_2x1_8bits.v {1 {vlog -work work B:/altera/Projetos/PBL1_CD/mux_2x1_8bits.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module mux_2x1_8bits
+
+Top level modules:
+	mux_2x1_8bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD/somador_16bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/somador_16bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module somador_16bits
+
+Top level modules:
+	somador_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD/complementoDe2_16bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/complementoDe2_16bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module complementoDe2_16bits
+
+Top level modules:
+	complementoDe2_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD/complementoDe2_8bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/complementoDe2_8bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module complementoDe2_8bits
+
+Top level modules:
+	complementoDe2_8bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD/somador_completo.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/somador_completo.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module somador_completo
+
+Top level modules:
+	somador_completo
+
+} {} {}} B:/altera/Projetos/PBL1_CD/bcd_to_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/bcd_to_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bcd_to_7seg
+
+Top level modules:
+	bcd_to_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/detector_sinal.v {1 {vlog -work work B:/altera/Projetos/PBL1_CD/detector_sinal.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module detector_sinal
+
+Top level modules:
+	detector_sinal
+
+} {} {}} B:/altera/Projetos/PBL1_CD/multiplicador_8x8.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/multiplicador_8x8.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module multiplicador_8x8
+
+Top level modules:
+	multiplicador_8x8
+
+} {} {}} B:/altera/Projetos/PBL1_CD/testbench.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/testbench.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module testbench
+
+Top level modules:
+	testbench
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_bin_to_hex_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/tb_bin_to_hex_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_bin_to_hex_7seg
+
+Top level modules:
+	tb_bin_to_hex_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/bin_pra_decimal.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/bin_pra_decimal.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bin_pra_decimal
+
+Top level modules:
+	bin_pra_decimal
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_multiplicador_sinalizado_8x8.v {1 {vlog -work work B:/altera/Projetos/PBL1_CD/tb_multiplicador_sinalizado_8x8.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module tb_multiplicador_sinalizado_8x8
+
+Top level modules:
+	tb_multiplicador_sinalizado_8x8
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_seletor_hexa_dec_to7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/tb_seletor_hexa_dec_to7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_seletor_hexa_dec_to7seg
+
+Top level modules:
+	tb_seletor_hexa_dec_to7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/seletor_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/seletor_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module seletor_7seg
+
+Top level modules:
+	seletor_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/bin_to_hex_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/bin_to_hex_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bin_to_hex_7seg
+
+Top level modules:
+	bin_to_hex_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD/valor_absoluto.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/valor_absoluto.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module valor_absoluto
+
+Top level modules:
+	valor_absoluto
+
+} {} {}} B:/altera/Projetos/PBL1_CD/valor_absoluto_16bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/valor_absoluto_16bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module valor_absoluto_16bits
+
+Top level modules:
+	valor_absoluto_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD/bcd_correction_shift.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/bcd_correction_shift.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bcd_correction_shift
+
+Top level modules:
+	bcd_correction_shift
+
+} {} {}} B:/altera/Projetos/PBL1_CD/tb_robusta.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/tb_robusta.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_robusta
+
+Top level modules:
+	tb_robusta
+
+} {} {}} B:/altera/Projetos/PBL1_CD/meio_somador.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/meio_somador.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module meio_somador
+
+Top level modules:
+	meio_somador
+
+} {} {}} B:/altera/Projetos/PBL1_CD/seletor_hexa_dec_to7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD/seletor_hexa_dec_to7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module seletor_hexa_dec_to7seg
+
+Top level modules:
+	seletor_hexa_dec_to7seg
+
+} {} {}}

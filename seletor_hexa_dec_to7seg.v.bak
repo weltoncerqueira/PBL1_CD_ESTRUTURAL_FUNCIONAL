@@ -1,0 +1,56 @@
+
+module seletor_hexa_dec_to7seg (
+	input  [15:0]  somaFinal,
+	input 			sel_hex_dec,
+	output wire [6:0] display0, display1, display2, display3, display4
+);
+
+	
+
+	wire [3:0] milhar_10k, milhar, centena, dezena, unidade;
+	wire [3:0] MILHAR_10K, MILHAR, CENTENA, DEZENA, UNIDADE;
+   wire [3:0] nibble3, nibble2, nibble1, nibble0;	 
+	
+	// --- Conversão BINÁRIO para HEXADECIMAL ---
+   assign nibble3 = soma2[15:12];
+   assign nibble2 = soma2[11:8];
+   assign nibble1 = soma2[7:4];
+   assign nibble0 = soma2[3:0];
+	
+	// --- CONVERSÃO BINÁRIO PARA DECIMAL ----	
+	bin_pra_decimal bin_dec_1(
+		.valor_bin(soma2),
+		.dez_milhar(milhar_10k),
+		.milhar(milhar),
+		.centena(centena),
+		.dezena(dezena),
+		.unidade(unidade)
+		);
+	
+	// Conversão DECIMAL para 7 segmentos ---
+   bcd_to_7seg bcd1 ( .bcd(dig_milhar_10k), .seg(MILHAR_10K) );
+   bcd_to_7seg bcd2 ( .bcd(dig_milhar),  	  .seg(MILHAR)		 );
+   bcd_to_7seg bcd3 ( .bcd(dig_centena),    .seg(CENTENA)	 );
+   bcd_to_7seg bcd4 ( .bcd(dig_dezena),     .seg(DEZENA)	    );
+   bcd_to_7seg bcd5 ( .bcd(dig_unidade),    .seg(UNIDADE)	 );
+   
+	// Conversão HEXADECIMAL para 7 segmentos ---
+   bin_to_hex_7seg hex_d3 (.bin(nibble3), .seg(hex3) );
+   bin_to_hex_7seg hex_d2 (.bin(nibble2), .seg(hex2) );
+   bin_to_hex_7seg hex_d1 (.bin(nibble1), .seg(hex1) );
+   bin_to_hex_7seg hex_d0 (.bin(nibble0), .seg(hex0) );
+	
+	// --- (MUX 2:1) PARA SELECIONAR ENTRE HEXA E DEC ---
+	mux_2x1 mux_1 ( .A(7'b1), .B(MILHAR_10K), .sel(sel_hex_dec), .S(display4));
+	mux_2x1 mux_2 ( .A(hex3), .B(MILHAR), 	   .sel(sel_hex_dec), .S(display3));
+	mux_2x1 mux_3 ( .A(hex2), .B(CENTENA), 	.sel(sel_hex_dec), .S(display2));
+	mux_2x1 mux_4 ( .A(hex1), .B(DEZENA), 	   .sel(sel_hex_dec), .S(display1));
+	mux_2x1 mux_5 ( .A(hex0), .B(UNIDADE), 	.sel(sel_hex_dec), .S(display0));
+	
+endmodule
+
+
+
+
+    
+	
