@@ -87,11 +87,11 @@ module equacao_completa (
 	 
 	 
 	 //Saida de outros leds (Sempre apagado)
-	 assign led4 = 1'b0;
-	 assign led5 = 1'b0;
-	 assign led6 = 1'b0;
-	 assign led7 = 1'b0;
-	 assign led8 = 1'b0;
-	 assign led9 = 1'b0;
+	 buf (led4, 1'b0);
+	 buf (led5, 1'b0);
+	 buf (led6, 1'b0);
+	 buf (led7, 1'b0);
+	 buf (led8, 1'b0);
+	 buf (led9, 1'b0);
 
 endmodule
