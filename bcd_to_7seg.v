@@ -1,33 +1,30 @@
 // Decodificador BCD (0-9) para display de 7 segmentos - ANODO COMUM
-// Versão estrutural usando apenas portas AND, OR e NOT
+
 
 module bcd_to_7seg (
     input  wire [3:0] bcd,
     output wire [6:0] seg
 );
 
-    // Inversões dos bits de entrada
     wire n0, n1, n2, n3;
     not (n0, bcd[0]);
     not (n1, bcd[1]);
     not (n2, bcd[2]);
     not (n3, bcd[3]);
 
-    // Mintermos para dígitos 0 a 9
     wire d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
 
-    and (d0, n3, n2, n1, n0);          // 0000
-    and (d1, n3, n2, n1, bcd[0]);      // 0001
-    and (d2, n3, n2, bcd[1], n0);      // 0010
-    and (d3, n3, n2, bcd[1], bcd[0]);  // 0011
-    and (d4, n3, bcd[2], n1, n0);      // 0100
-    and (d5, n3, bcd[2], n1, bcd[0]);  // 0101
-    and (d6, n3, bcd[2], bcd[1], n0);  // 0110
-    and (d7, n3, bcd[2], bcd[1], bcd[0]); // 0111
-    and (d8, bcd[3], n2, n1, n0);      // 1000
-    and (d9, bcd[3], n2, n1, bcd[0]);  // 1001
+    and (d0, n3, n2, n1, n0);          
+    and (d1, n3, n2, n1, bcd[0]);      
+    and (d2, n3, n2, bcd[1], n0);     
+    and (d3, n3, n2, bcd[1], bcd[0]);  
+    and (d4, n3, bcd[2], n1, n0);      
+    and (d5, n3, bcd[2], n1, bcd[0]);  
+    and (d6, n3, bcd[2], bcd[1], n0);  
+    and (d7, n3, bcd[2], bcd[1], bcd[0]); 
+    and (d8, bcd[3], n2, n1, n0);      
+    and (d9, bcd[3], n2, n1, bcd[0]);  
 
-    // Sinais internos para cada segmento (ativo em 0 - ânodo comum)
     // seg[6:0] = {a,b,c,d,e,f,g}
 	 
     wire seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g;
@@ -60,8 +57,6 @@ module bcd_to_7seg (
     // g = 1 (apagado) para: 0,1,7
     or (seg_g, d0, d1, d7);
 
-    // Saída na ordem {a,b,c,d,e,f,g} (MSB = a, LSB = g)
-    // Para ânodo comum: 0 = aceso, 1 = apagado
     assign seg[6] = seg_a;
     assign seg[5] = seg_b;
     assign seg[4] = seg_c;

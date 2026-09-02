@@ -1,0 +1,127 @@
+B:/altera/Projetos/PBL1_CD_Alternativo-main/meio_somador.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/meio_somador.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module meio_somador
+
+Top level modules:
+	meio_somador
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/seletor_hexa_dec_to7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/seletor_hexa_dec_to7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module seletor_hexa_dec_to7seg
+
+Top level modules:
+	seletor_hexa_dec_to7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/equacao_completa.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/equacao_completa.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module equacao_completa
+
+Top level modules:
+	equacao_completa
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/multiplicador_sinalizado_8x8.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/multiplicador_sinalizado_8x8.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module multiplicador_8x8_sinalizado
+
+Top level modules:
+	multiplicador_8x8_sinalizado
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/somador_16bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/somador_16bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module somador_16bits
+
+Top level modules:
+	somador_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/tb_bin_pra_decimal.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/tb_bin_pra_decimal.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_bin_pra_decimal
+
+Top level modules:
+	tb_bin_pra_decimal
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/complementoDe2_16bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/complementoDe2_16bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module complementoDe2_16bits
+
+Top level modules:
+	complementoDe2_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/somador_completo.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/somador_completo.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module somador_completo
+
+Top level modules:
+	somador_completo
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/complementoDe2_8bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/complementoDe2_8bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module complementoDe2_8bits
+
+Top level modules:
+	complementoDe2_8bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/tb_equacao_completa.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/tb_equacao_completa.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module tb_equacao_completa
+
+Top level modules:
+	tb_equacao_completa
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/bcd_to_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/bcd_to_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bcd_to_7seg
+
+Top level modules:
+	bcd_to_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/multiplicador_8x8.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/multiplicador_8x8.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module multiplicador_8x8
+
+Top level modules:
+	multiplicador_8x8
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/bin_pra_decimal.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/bin_pra_decimal.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bcd_maior_igual_5
+-- Compiling module full_adder
+-- Compiling module somador_4bits
+-- Compiling module mux2_1
+-- Compiling module mux2_1_4bits
+-- Compiling module ajuste_bcd
+-- Compiling module double_dabble_stage
+-- Compiling module bin_pra_decimal
+
+Top level modules:
+	bin_pra_decimal
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/seletor_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/seletor_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module seletor_7seg
+
+Top level modules:
+	seletor_7seg
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/valor_absoluto_16bits.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/valor_absoluto_16bits.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module valor_absoluto_16bits
+
+Top level modules:
+	valor_absoluto_16bits
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/valor_absoluto.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/valor_absoluto.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module valor_absoluto
+
+Top level modules:
+	valor_absoluto
+
+} {} {}} B:/altera/Projetos/PBL1_CD_Alternativo-main/bin_to_hex_7seg.v {1 {vlog -work work -stats=none B:/altera/Projetos/PBL1_CD_Alternativo-main/bin_to_hex_7seg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module bin_to_hex_7seg
+
+Top level modules:
+	bin_to_hex_7seg
+
+} {} {}}

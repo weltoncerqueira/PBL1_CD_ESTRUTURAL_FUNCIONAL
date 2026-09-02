@@ -1,3 +1,5 @@
+//Somador completo de 16 bits
+
 module somador_16bits (
     input  wire [15:0] a,
     input  wire [15:0] b,
@@ -25,7 +27,11 @@ module somador_16bits (
     somador_completo fa14 (.A(a[14]), .B(b[14]), .cin(carry[13]),   .cout(carry[14]), .S(sum[14]));
     somador_completo fa15 (.A(a[15]), .B(b[15]), .cin(carry[14]),   .cout(carry[15]), .S(sum[15]));
 
+	 // Lógica de overflow
     xor u1 (overflow, carry[14], carry[15]);
+	 
+	 //Saida do carry final
     buf u2 (cout, carry[15]);
+	 
 
 endmodule

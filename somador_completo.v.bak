@@ -1,5 +1,3 @@
-//somador_completo.v
-
 module somador_completo (
     input  wire A,
     input  wire B,
@@ -8,6 +6,7 @@ module somador_completo (
     output wire cout
 );
 
+    // Fios internos para interconectar as portas lógicas
     wire axorb;
     wire aandb;
     wire cin_and_axorb;

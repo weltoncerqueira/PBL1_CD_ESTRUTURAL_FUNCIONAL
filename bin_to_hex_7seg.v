@@ -1,31 +1,24 @@
-// ============================================================
 // Decodificador HEXADECIMAL (0-F) para display de 7 segmentos
-// Lógica 100% ESTRUTURAL
-// Ânodo Comum - saída ativa em nível BAIXO (0 = aceso, 1 = apagado)
 // Mapeamento PADRONIZADO: seg[6:0] = {a, b, c, d, e, f, g}
-// Mapeamento de Entrada: bin[3:0] = {A, B, C, D} (A=MSB, D=LSB)
-// ============================================================
+
 
 module bin_to_hex_7seg (
     input  wire [3:0] bin,
     output wire [6:0] seg
 );
 
-    // 1. Buffers de entrada (A=MSB, D=LSB)
     wire A, B, C, D;
     buf (A, bin[3]);
     buf (B, bin[2]);
     buf (C, bin[1]);
     buf (D, bin[0]);
 
-    // 2. Inversores das entradas
     wire An, Bn, Cn, Dn;
     not (An, A);
     not (Bn, B);
     not (Cn, C);
     not (Dn, D);
-
-    // 3. Fios para conexões dos mintermos
+	 
     wire [27:0] m;
 
     // --- Segmento A (seg[6]) ---
@@ -40,22 +33,22 @@ module bin_to_hex_7seg (
     and (m[5], An, B, C, Dn);
     and (m[6], A, Bn, C, D);
     and (m[7], A, B, Cn, Dn);
-    and (m[25], A, B, C, Dn); // E (1110)
-    and (m[26], A, B, C, D);  // F (1111)
+    and (m[25], A, B, C, Dn);
+    and (m[26], A, B, C, D);  
     or  (seg[5], m[4], m[5], m[6], m[7], m[25], m[26]);
 
     // --- Segmento C (seg[4]) ---
     and (m[8], An, Bn, C, Dn);
     and (m[9], A, B, Cn, Dn);
-    and (m[10], A, B, C);     // E (1110) e F (1111)
+    and (m[10], A, B, C);     
     or  (seg[4], m[8], m[9], m[10]);
 
-    // --- Segmento D (seg[3]) --- (CORRIGIDO: adicionado m[27] para o digito F)
+    // --- Segmento D (seg[3]) ---
     and (m[11], An, Bn, Cn, D);
     and (m[12], An, B, Cn, Dn);
     and (m[13], An, B, C, D);
     and (m[14], A, Bn, C, Dn);
-    and (m[27], A, B, C, D);  // F (1111) - Desliga o segmento d
+    and (m[27], A, B, C, D);  
     or  (seg[3], m[11], m[12], m[13], m[14], m[27]);
 
     // --- Segmento E (seg[2]) ---

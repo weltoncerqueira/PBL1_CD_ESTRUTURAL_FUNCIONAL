@@ -8,6 +8,11 @@ module seletor_hexa_dec_to7seg (
     output wire [6:0]  display4,
     output wire        erro
 );
+	
+	// seletor 01 = Hexa
+	// seletor 10 = DeC
+	// seletor 00 = displays apagados
+	// seletor 11 = Flag Error
 
     wire [3:0] dez_milhar, milhar, centena, dezena, unidade;
     wire [3:0] nibble3, nibble2, nibble1, nibble0;    
@@ -19,6 +24,13 @@ module seletor_hexa_dec_to7seg (
     assign nibble2 = somaFinal[11:8];
     assign nibble1 = somaFinal[7:4];
     assign nibble0 = somaFinal[3:0];
+	 
+	     // --- Conversão HEXADECIMAL para 7 Segmentos ---
+    bin_to_hex_7seg hex_d0 (.bin(nibble0), .seg(hex0) );
+    bin_to_hex_7seg hex_d1 (.bin(nibble1), .seg(hex1) );
+    bin_to_hex_7seg hex_d2 (.bin(nibble2), .seg(hex2) );
+    bin_to_hex_7seg hex_d3 (.bin(nibble3), .seg(hex3) );
+	 
     
     // --- Conversão BINÁRIO para DECIMAL ---    
     bin_pra_decimal bin_dec_1(
@@ -37,11 +49,6 @@ module seletor_hexa_dec_to7seg (
     bcd_to_7seg bcd1 ( .bcd(dezena),     .seg(dec1) );
     bcd_to_7seg bcd0 ( .bcd(unidade),    .seg(dec0) );
     
-    // --- Conversão HEXADECIMAL para 7 Segmentos ---
-    bin_to_hex_7seg hex_d0 (.bin(nibble0), .seg(hex0) );
-    bin_to_hex_7seg hex_d1 (.bin(nibble1), .seg(hex1) );
-    bin_to_hex_7seg hex_d2 (.bin(nibble2), .seg(hex2) );
-    bin_to_hex_7seg hex_d3 (.bin(nibble3), .seg(hex3) );
     
     // --- Instanciação Estrutural dos Seletores dos Displays ---
     // Display 4: No Hexadecimal fica desligado (7'b1111111) / No Decimal exibe a dezena de milhar (dec4)
@@ -51,7 +58,7 @@ module seletor_hexa_dec_to7seg (
     seletor_7seg sel_d3 ( .hexa(hex3),       .deci(dec3), .sel(sel), .S(display3) );
     seletor_7seg sel_d4 ( .hexa(7'b1111111), .deci(dec4), .sel(sel), .S(display4) );
     
-    // Porta AND estrutural para sinalizar erro apenas no caso 11 (sel[1] == 1 e sel[0] == 1)
+    // Porta AND para sinalizar erro apenas no caso 11 (sel[1] == 1 e sel[0] == 1)
     and (erro, sel[1], sel[0]);
 
 endmodule
